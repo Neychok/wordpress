@@ -414,7 +414,7 @@ function twenty_twenty_one_scripts() {
 	// Threaded comment reply styles.
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
-	}
+	};
 
 	// Register the IE11 polyfill file.
 	wp_register_script(
