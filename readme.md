@@ -40,3 +40,25 @@ Completed:
 Uncompleted:
 
 - Tasks from day 7
+
+## Day 3:
+
+Completed:
+
+- Tasks from day 7
+
+	- Struggle #1: displaying the results in a non-broken way.
+
+- Tasks from day 8
+
+	- Transients seemed pretty straight forward.
+
+- Tasks from day 9 
+
+	- Struggle #1: Pagination is not working on student archive page
+
+Uncompleted:
+
+- Pagination of student archive page
+
+- Display the picture, name and the excerpt of the student.
