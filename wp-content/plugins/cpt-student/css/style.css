@@ -1,0 +1,66 @@
+.student-image {
+	display: flex;
+	justify-content: center;
+}
+.student-image img{
+	width: 250px !important;
+	height: 250px !important;
+	border-radius: 50%;
+}
+.student-name {
+	text-align: center;
+	margin-bottom: 25px;
+}
+.student-details {
+	text-align: center;
+	margin-bottom: 25px;
+}
+.student-content {
+	max-width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.student-archive-wrapper {
+
+	display: block;
+	max-width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+.student-archive-wrapper a {
+	text-decoration: none;
+}
+
+.student-wrapper {
+
+	display: flex;
+	justify-content: start;
+	margin-bottom: 50px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #33333333;
+}
+
+.student-wrapper:hover {
+
+	border-color: #333
+
+}
+
+.student-thumb {
+
+}
+
+.student-thumb img {
+	width: 150px !important;
+	height: 150px !important;
+	border-radius: 999px;
+}
+
+.student-archive-detail {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-left: 25px;
+}

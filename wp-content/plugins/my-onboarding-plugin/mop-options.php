@@ -29,7 +29,6 @@ add_action( 'admin_menu', 'mop_add_options' );
 
 
 function ajax_enqueue_mop() {   
-    //TODO add script only to settings page
     
     wp_enqueue_script( 'ajax-script', plugins_url( '/js/mop-ajax-save.js', __FILE__ ), array( 'jquery' ), false, true );
     

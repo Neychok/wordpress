@@ -62,3 +62,25 @@ Uncompleted:
 - Pagination of student archive page
 
 - Display the picture, name and the excerpt of the student.
+
+## Day 4:
+
+Completed:
+
+- Pagination of student archive page
+
+	- Struggle #1: Had to comment code from previous tasks because it was overwriting posts_per_page.
+
+- Rest of tasks from yesterday
+
+- Tasks from day 10
+
+	- Created custom meta boxes and display them on the front end.
+
+	- Created a custom column with checkbox that saves its state with ajax.
+
+- Tasks from day 11
+
+	- Created a custom shortcode that takes Student ID as attr and displays that student.
+
+	- Created a widget with posts per page field and a dropdown whether to look for active or inactive students on the admin side. It uses WP_Query to display students that match the args.
