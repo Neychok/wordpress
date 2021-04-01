@@ -11,7 +11,7 @@
 
 get_header();
 
-$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+$current = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 $args = array(
 	'post_type' => 'student',
@@ -19,7 +19,7 @@ $args = array(
     'posts_per_page' => 4,
     'orderby' => 'title',
     'order' => 'ASC',
-	'paged' => $paged,
+	'paged' => $current,
 );
 
 // The Query
@@ -29,6 +29,8 @@ $description = get_the_archive_description();
 ?>
 
 <?php if ( $the_query->have_posts() ) : ?>
+
+	<?php var_dump( $current );?>
 
 	<header class="page-header alignwide">
 		<?php the_archive_title( '<h1 class="page-title">', '</h1>' ); ?>
@@ -42,8 +44,26 @@ $description = get_the_archive_description();
 		<?php get_template_part( 'template-parts/content/content', get_theme_mod( 'display_excerpt_or_full_post', 'excerpt' ) ); ?>
 	<?php endwhile; ?>
 
-	<div class="nav-previous alignleft"><?php next_posts_link( 'Older posts' ); ?></div>
- 	<div class="nav-next alignright"><?php previous_posts_link( 'Newer posts' ); ?></div>
+	<div style="text-align: center;" class="pagination">
+    <?php 
+        echo paginate_links( array(
+            'base'         => '%_%',
+            'total'        => $the_query->max_num_pages,
+            'current'      => max( 1, get_query_var( 'paged' ) ),
+            'format'       => '?paged=%#%',
+            'show_all'     => false,
+            // 'type'         => 'plain',
+            // 'end_size'     => 2,
+            // 'mid_size'     => 1,
+            // 'prev_next'    => true,
+            // 'prev_text'    => sprintf( '<i></i> %1$s', __( 'First Students', 'text-domain' ) ),
+            // 'next_text'    => sprintf( '%1$s <i></i>', __( 'Last Students', 'text-domain' ) ),
+            // 'add_args'     => false,
+            // 'add_fragment' => '',
+       		)
+		);
+    ?>
+	</div>
 
 <?php else : ?>
 	<?php get_template_part( 'template-parts/content/content-none' ); ?>
