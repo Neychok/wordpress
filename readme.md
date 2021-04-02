@@ -21,6 +21,8 @@ Uncompleted:
 
 - Tasks from day 5
 
+	- Make a plugin that uses filters to edit the html output of posts the_content()
+
 	- Struggle #1: Couldn't think of a way to insert a div inside a paragraph.
 
 ## Day 2:
@@ -33,6 +35,8 @@ Completed:
 
 - Tasks from day 6
 
+	- Create a custom menu with a option (checkbox) that enables/disable filters from the previous task
+
 	- Struggle #1: Had some problems with ajax, jquery and request handling but resolved them with some assistance from the vim-user sitting next to me.ⱼₖ
 
 - Started day 7 tasks
@@ -41,27 +45,37 @@ Uncompleted:
 
 - Tasks from day 7
 
+	- Creating a new plugin with an admin menu where you can provide an Amazon link and display the results in the admin menu page.
+
 ## Day 3:
 
 Completed:
 
 - Tasks from day 7
 
-	- Struggle #1: displaying the results in a non-broken way.
+	- Struggle #1: Understanding the end goal of the task and how the page should be displayed
+
+	- Struggle #2: Displaying the results in a non-broken way.
 
 - Tasks from day 8
 
+	- Use the transients API to cache the amazon results from the last task's plugin
+
 	- Transients seemed pretty straight forward.
 
-- Tasks from day 9 
+- Tasks from day 9
+
+	- Build a custom post type ‘student’
+
+		- Creating the custom post type was easy.
 
 	- Struggle #1: Pagination is not working on student archive page
 
 Uncompleted:
 
-- Pagination of student archive page
+	- Pagination of student archive page
 
-- Display the picture, name and the excerpt of the student.
+	- Display the picture, name and the excerpt of the student.
 
 ## Day 4:
 
@@ -69,13 +83,13 @@ Completed:
 
 - Pagination of student archive page
 
-	- Struggle #1: Had to comment code from previous tasks because it was overwriting posts_per_page.
+	- Had to comment out code from previous tasks because it was overwriting posts_per_page.
 
 - Rest of tasks from yesterday
 
 - Tasks from day 10
 
-	- Created custom meta boxes and display them on the front end.
+	- Create custom meta boxes and display them on the front end.
 
 	- Created a custom column with checkbox that saves its state with ajax.
 
