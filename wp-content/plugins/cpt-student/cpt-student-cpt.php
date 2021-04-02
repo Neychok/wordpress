@@ -27,6 +27,7 @@ function st_register_post_type() {
 	$args = array(
 		'labels'            => $labels,
 		'public'            => true,
+		'show_in_rest'		=> true,
 		'menu_position'     => 4,
 		'menu_icon'         => 'dashicons-welcome-learn-more',
 		'can_export'        => true,

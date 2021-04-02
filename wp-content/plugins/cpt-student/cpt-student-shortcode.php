@@ -12,33 +12,32 @@ function st_shortcode( $atts, $content = null ) {
 	);
 
 	$student_by_id = new WP_Query( $args );
-	if ( $student_by_id->have_posts() ) :
-		while ( $student_by_id->have_posts() ) : ?>
-				<?php $student_by_id->the_post(); ?>
-				<a href="<?php the_permalink(); ?>" class="student-wrapper">
-					<div class="student-thumb">
-						<?php 
-						if ( has_post_thumbnail() ) {
 
-							the_post_thumbnail();
+	if (is_admin() !== true) {
 
-						} else {
+		if ( $student_by_id->have_posts() ) : ?>
+			<?php $student_by_id->the_post(); ?>
+			<a href="<?php the_permalink(); ?>" class="student-wrapper">
+				<div class="student-thumb">
+					<?php 
+					if ( has_post_thumbnail() ) {
 
-							echo '<img src="https://via.placeholder.com/150">';
+						the_post_thumbnail();
 
-						}?>
-					</div>
-					<div class="student-archive-detail">
-						<?php the_title(); ?>
-						<?php the_excerpt(); ?>
-					</div>
-				</a>
-			<?php 
-			endwhile;
+					} else {
 
-	else : ?>
-		<div>No students by this ID found!</div>
-	<?php endif;
+						echo '<img src="https://via.placeholder.com/150">';
 
-}
-add_shortcode( 'student_by_id', 'st_shortcode' );
+					}?>
+				</div>
+				<div class="student-archive-detail">
+					<?php the_title(); ?>
+					<?php the_excerpt(); ?>
+				</div>
+			</a>
+		<?php else : ?>
+			<div>No students by this ID found!</div>
+		<?php endif;
+		}
+	}
+add_shortcode( 'student_by_id', 'st_shortcode', 10 );

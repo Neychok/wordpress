@@ -50,7 +50,6 @@ class display_students_widget extends WP_Widget {
 			<section class="student-archive-wrapper">
 			<?php while ( $the_query->have_posts() ) : ?>
 				<?php $the_query->the_post(); ?>
-				<?php the_ID(); ?>
 				<a href="<?php the_permalink(); ?>" class="student-wrapper">
 					<div class="student-thumb">
 						<?php 
@@ -87,9 +86,8 @@ class display_students_widget extends WP_Widget {
 
 		<?php 
 		endif;
-		echo $args['after_widget'];
 	}
-          
+
 	/** 
 	 * Widget Backend.
 	 */

@@ -46,7 +46,6 @@ $description = get_the_archive_description();
     <section class="student-archive-wrapper">
 	<?php while ( $the_query->have_posts() ) : ?>
 		<?php $the_query->the_post(); ?>
-        <?php the_ID(); ?>
         <a href="<?php the_permalink(); ?>" class="student-wrapper">
             <div class="student-thumb">
                 <?php 

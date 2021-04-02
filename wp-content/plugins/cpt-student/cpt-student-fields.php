@@ -113,9 +113,9 @@ function st_meta_save( $post_id ) {
     if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
         return;
     }
-
-    update_post_meta( $post_id, 'student_status', sanitize_text_field( $_POST['student_status'] ) );
-
+    if ( isset( $_POST[ 'student_country' ] ) ) {
+        update_post_meta( $post_id, 'student_status', sanitize_text_field( $_POST['student_status'] ) );
+    }
     if ( isset( $_POST[ 'student_country' ] ) ) {
         update_post_meta( $post_id, 'student_country', sanitize_text_field( $_POST['student_country'] ) );
     }

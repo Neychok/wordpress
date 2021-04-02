@@ -84,3 +84,25 @@ Completed:
 	- Created a custom shortcode that takes Student ID as attr and displays that student.
 
 	- Created a widget with posts per page field and a dropdown whether to look for active or inactive students on the admin side. It uses WP_Query to display students that match the args.
+
+## Day 5:
+
+Completed:
+
+- Tasks from day 12
+
+	- Created a sidebar and displayed it.
+
+- Tasks from day 13
+
+	- Created 2 public API endpoints that get all students data and student data by ID
+
+- Tasks from day 14
+
+	- Created 3 protected API endpoints for add/edit/delete students.
+
+		- Struggle #1: Not sure how to setup authentication
+
+Uncompleted:
+
+	- Create authentication for API
