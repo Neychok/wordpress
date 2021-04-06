@@ -27,21 +27,42 @@ function mop_settings_page() {
 
 add_action( 'admin_menu', 'mop_add_options' );
 
+/**
+ * Enqueues Ajax script
+ * 
+ */
 
 function ajax_enqueue_mop() {   
     
-    wp_enqueue_script( 'ajax-script', plugins_url( '/js/mop-ajax-save.js', __FILE__ ), array( 'jquery' ), false, true );
-    
-	wp_localize_script( 'ajax-script', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+    global $pagenow;
+
+    if ( $pagenow == 'admin.php' && $_GET['page'] == 'mop-settings' ) {
+
+        wp_enqueue_script( 'ajax-script', plugins_url( '/js/mop-ajax-save.js', __FILE__ ), array( 'jquery' ), false, true );
+        
+        wp_localize_script( 'ajax-script', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+
+    }
     
 }
 add_action( 'admin_enqueue_scripts', 'ajax_enqueue_mop' );
 
+
+/**
+ * Saves option
+ * Called from mop-ajax-save.js
+ * 
+ */
 function mop_save() {
-    update_option( 'mop_checkbox', $_POST['checked'] );
+    update_option( 'mop_checkbox', sanitize_option( 'mop_checkbox', $_POST['checked'] ) );
 }
 
 add_action( 'wp_ajax_mop_save', 'mop_save' );
+
+/**
+ * Create a section with the option
+ * 
+ */
 
 function mop_settings_init() {
 
@@ -61,7 +82,7 @@ add_action( 'admin_init', 'mop_settings_init' );
 function mop_field_filters_callback() {
     ?>
     <label>Enabled</label>
-    <input type="checkbox" name="mop_checkbox"  id="checkbox" <?php checked(get_option( 'mop_checkbox' ), 'true') ?> />
+    <input type="checkbox" name="mop_checkbox" id="mop-checkbox" <?php checked(get_option( 'mop_checkbox' ), 'true') ?> />
     <?php
 }
 

@@ -38,7 +38,7 @@ function st_register_post_type() {
 		'capability_type'   => 'post',
 		'map_meta_cap'      => true,
 		'rewrite'           => array(
-			'slug' => 'students',
+				'slug' => 'students',
 		),
 		'supports'          => array(
 			'title',
@@ -131,54 +131,3 @@ function st_load_templates( $original_template ) {
 }
 
 add_action( 'template_include', 'st_load_templates' );
-
-/**
- *  Creates custom column
- * 
- */
-
-function ajax_enqueue_st() {   
-    
-    wp_enqueue_script( 'ajax-script', plugins_url( '/js/cpt-ajax-save.js', __FILE__ ), array( 'jquery' ), false, true );
-    
-	wp_localize_script( 'ajax-script', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-    
-}
-add_action( 'admin_enqueue_scripts', 'ajax_enqueue_st' );
-
-// Add column
-function st_columns_head( $defaults ) {
-    $defaults['activated'] = 'Activated';
-    return $defaults;
-}
- 
-// Show checkbox
-function st_columns_content( $column_name, $post_ID ) {
-    if ( $column_name == 'activated' ) {
-		
-		echo '<input type="checkbox" id="student-admin-checkbox" value="' . $post_ID . '" ' . ( isset( get_post_meta( $post_ID )['student_status'][0] ) ? checked( get_post_meta( $post_ID )['student_status'][0], 'active', false ) : '' ) . ' />';
-
-    }
-}
-
-add_filter('manage_posts_columns', 'st_columns_head');
-add_action('manage_posts_custom_column', 'st_columns_content', 10, 2);
-
-
-/**
- * AJAX save
- * 
- */
-function st_save() {
-
-	if ($_POST['checked'] == 'true') {
-
-		update_post_meta( $_POST['post_id'], 'student_status', 'active' );
-
-	} else {
-
-		delete_post_meta( $_POST['post_id'], 'student_status' );
-
-	}
-}
-add_action( 'wp_ajax_st_save', 'st_save' );

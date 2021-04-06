@@ -19,6 +19,12 @@ function st_meta_callback( $post ) {
 	
 	wp_nonce_field( basename( __FILE__ ), 'st_student_nonce' );
     $st_stored_meta = get_post_meta( $post->ID );
+
+    $student_status = isset( $st_stored_meta['student_status'][0] ) ? checked( $st_stored_meta['student_status'][0], 'active', false ) : '';
+    $student_country = ! empty ( $st_stored_meta['student_country'][0] ) ? esc_attr( $st_stored_meta['student_country'][0] ) : '';
+    $student_city = ! empty ( $st_stored_meta['student_city'][0] )  ? esc_attr( $st_stored_meta['student_city'][0] ) : '';
+    $student_address = ! empty ( $st_stored_meta['student_address'][0] ) ? esc_attr( $st_stored_meta['student_address'][0] ) : '';
+    $student_grade = ! empty ( $st_stored_meta['student_grade'][0] ) ?  esc_attr( $st_stored_meta['student_grade'][0] ) : '';
 	
     ?>
 
@@ -31,13 +37,14 @@ function st_meta_callback( $post ) {
 		<div class="meta-td">
 			<input 
 			type="checkbox" 
-			name="student_status"
+			name="<?php echo $post->ID ?>"
 			id="student-status"
-			value="yes"
-			<?php isset( $st_stored_meta['student_status'][0] ) ? checked($st_stored_meta['student_status'][0], 'yes') : '' ?>
+			value="active"
+			<?php echo $student_status ?>
 			>
 		</div>
 	</div>
+
 	<!-- student country field -->
 	<div class="meta-row">
             <div class="meta-th">
@@ -48,7 +55,7 @@ function st_meta_callback( $post ) {
                 type="text" 
                 name="student_country"
                 id="student-country" 
-                value="<?php if ( ! empty ( $st_stored_meta['student_country'] ) ) echo esc_attr( $st_stored_meta['student_country'][0] ); ?>"
+                value="<?php echo $student_country ?>"
                 >
             </div>
         </div>
@@ -63,7 +70,7 @@ function st_meta_callback( $post ) {
                 type="text" 
                 name="student_city" 
                 id="student-city" 
-                value="<?php if ( ! empty ( $st_stored_meta['student_city'] ) ) echo esc_attr( $st_stored_meta['student_city'][0] ); ?>"
+                value="<?php echo $student_city ?>"
                 >
             </div>
         </div>
@@ -78,7 +85,7 @@ function st_meta_callback( $post ) {
                 type="text" 
                 name="student_address" 
                 id="student-address" 
-                value="<?php if ( ! empty ( $st_stored_meta['student_address'] ) ) echo esc_attr( $st_stored_meta['student_address'][0] ); ?>"
+                value="<?php echo $student_address ?>"
                 >
             </div>
         </div>
@@ -93,7 +100,7 @@ function st_meta_callback( $post ) {
                 type="text" 
                 name="student_grade" 
                 id="student-grade" 
-                value="<?php if ( ! empty ( $st_stored_meta['student_grade'] ) ) echo esc_attr( $st_stored_meta['student_grade'][0] ); ?>"
+                value="<?php echo $student_grade ?>"
                 >
             </div>
         </div>
@@ -107,15 +114,19 @@ function st_meta_save( $post_id ) {
     // Checks save status
     $is_autosave = wp_is_post_autosave( $post_id );
     $is_revision = wp_is_post_revision( $post_id );
+
+    //TODO Find why wp_nonce is not working
     $is_valid_nonce = ( isset( $_POST[ 'st_student_nonce' ] ) && wp_verify_nonce( $_POST[ 'st_student_nonce' ], basename( __FILE__ ) ) ) ? 'true' : 'false';
 
     // Exits script depending on save status
     if ( $is_autosave || $is_revision || !$is_valid_nonce ) {
         return;
     }
-    if ( isset( $_POST[ 'student_country' ] ) ) {
+
+    if ( isset( $_POST[ 'student_status' ] ) ) {
         update_post_meta( $post_id, 'student_status', sanitize_text_field( $_POST['student_status'] ) );
     }
+
     if ( isset( $_POST[ 'student_country' ] ) ) {
         update_post_meta( $post_id, 'student_country', sanitize_text_field( $_POST['student_country'] ) );
     }
@@ -127,9 +138,11 @@ function st_meta_save( $post_id ) {
     if ( isset( $_POST[ 'student_address' ] ) ) {
         update_post_meta( $post_id, 'student_address', sanitize_text_field( $_POST['student_address'] ) );
     }
+
 	if ( isset( $_POST[ 'student_grade' ] ) ) {
         update_post_meta( $post_id, 'student_grade', sanitize_text_field( $_POST['student_grade'] ) );
     }
+    
 }
 
 add_action( 'save_post', 'st_meta_save' );

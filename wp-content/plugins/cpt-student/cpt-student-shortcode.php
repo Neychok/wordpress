@@ -13,8 +13,8 @@ function st_shortcode( $atts, $content = null ) {
 
 	$student_by_id = new WP_Query( $args );
 
-	if (is_admin() !== true) {
 
+	 	ob_start();
 		if ( $student_by_id->have_posts() ) : ?>
 			<?php $student_by_id->the_post(); ?>
 			<a href="<?php the_permalink(); ?>" class="student-wrapper">
@@ -38,6 +38,7 @@ function st_shortcode( $atts, $content = null ) {
 		<?php else : ?>
 			<div>No students by this ID found!</div>
 		<?php endif;
+		$content = ob_get_clean();
+		return $content;
 		}
-	}
 add_shortcode( 'student_by_id', 'st_shortcode', 10 );

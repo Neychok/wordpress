@@ -1,30 +1,50 @@
 <?php
 
 /**
- * Gets all students data
+ * Gets all students data 
+ * or specific student if ID is specified
  * 
- * @return string|null All students data or null if none.
+ * @param WP_REST_Request $request
+ * 
+ * @return array|null All students' data, specific student's data or null.
  */
 
-function st_get_all_students() {
+function st_get_student( $request ) {
 
+	// Arguments for Query
 	$args = array(
 
 		'post_type' => 'student',
+		'posts_per_page'    => 4,
+		'post_status' => array('publish', 'pending', 'draft'),
+		// 'orderby'           => 'title',
+    	// 'order'             => 'ASC',
 
 	);
 
-	$posts = get_posts( $args );
+	// Checks if user passed ID
+	if ( $request->has_param( 'ID' ) ) {
 
-	if ( isset( $posts ) ) {
+		$args += ['p' => $request->get_param( 'ID' )];
+	
+	}
 
-		$data = [];
+	$the_query = new WP_Query( $args );
 
-		$i 	  = 0;
+	$data = [];
 
+	$i 	  = 0;
+
+	if ( $the_query->have_posts() ) {
+
+		$posts = $the_query->posts;
+		
 		foreach ( $posts as $post ) {
 
-			$data[ $i ]['id']                        	= $post->ID;
+			$meta_data = get_post_meta( $post->ID );
+
+			$data[ $i ]['ID']                        	= $post->ID;
+			$data[ $i ]['post_status']                  = $post->post_status;
 			$data[ $i ]['title'] 						= $post->post_title;
 			$data[ $i ]['excerpt'] 						= $post->post_excerpt;
 			$data[ $i ]['content'] 						= $post->post_content;
@@ -34,228 +54,189 @@ function st_get_all_students() {
 			$data[ $i ]['featured_image']['large'] 		= get_the_post_thumbnail_url( $post->ID, 'large' );
 			$data[ $i ]['date'] 						= $post->post_date;
 			// Custom meta
-			$data[ $i ]['country'] 						= get_post_meta( $post->ID, 'student_country', true );
-			$data[ $i ]['city'] 						= get_post_meta( $post->ID, 'student_city', true );
-			$data[ $i ]['address'] 						= get_post_meta( $post->ID, 'student_address', true );
-			$data[ $i ]['grade'] 						= get_post_meta( $post->ID, 'student_grade', true );
+			$data[ $i ]['student_status'] 				= isset( $meta_data['student_status'] ) ? $meta_data['student_status'] : '';
+			$data[ $i ]['country'] 						= isset( $meta_data['student_country'] ) ? $meta_data['student_country'] : '';
+			$data[ $i ]['city'] 						= isset( $meta_data['student_city'] ) ? $meta_data['student_city'] : '';
+			$data[ $i ]['address'] 						= isset( $meta_data['student_address'] ) ? $meta_data['student_address'] : '';
+			$data[ $i ]['grade'] 						= isset( $meta_data['student_grade'] ) ? $meta_data['student_grade'] : '';
 
 			$i++;
-
+			
 		}
-
 		return $data;
-
+		
 	} else {
-
 		return null;
-
 	}
 
-}
-
- /**
-  * Get student by ID
-  * 
-  * @param int $id ID of the student.
-  * @return string|null The data of that student or null if none.
-  */
-
-function st_get_student( $request ) {
-
-	$args = array(
-
-		'p' 		=> $request['id'],
-		'post_type' => 'student',
-
-	);
-
-	$post = get_posts( $args );
-
-	if ( isset( $post[0] ) ) {
-
-		$data = [];
-
-		$data['id'] 						 = $post[0]->ID;
-		$data['title'] 						 = $post[0]->post_title;
-		$data['excerpt'] 					 = $post[0]->post_excerpt;
-		$data['content'] 					 = $post[0]->post_content;
-		$data['slug'] 						 = $post[0]->post_name;
-		$data['featured_image']['thumbnail'] = get_the_post_thumbnail_url( $post[0]->ID, 'thumbnail' );
-		$data['featured_image']['medium'] 	 = get_the_post_thumbnail_url( $post[0]->ID, 'medium' );
-		$data['featured_image']['large'] 	 = get_the_post_thumbnail_url( $post[0]->ID, 'large' );
-		$data['date'] 						 = $post[0]->post_date;
-		// Custom meta
-		$data['country'] 					 = get_post_meta( $post[0]->ID, 'student_country', true );
-		$data['city'] 						 = get_post_meta( $post[0]->ID, 'student_city', true );
-		$data['address'] 					 = get_post_meta( $post[0]->ID, 'student_address', true );
-		$data['grade'] 						 = get_post_meta( $post[0]->ID, 'student_grade', true );
-
-		return $data;
-
-	} else {
-
-		return null;
-
-	}
 }
 
 /** 
- *  Adds a new student
+ *  Adds/Edits student
  * 
- * @param int $id ID of the student.
- * @return bool true if successful, false otherwise.
+ * @param WP_REST_Request $request
+ * 
+ * @return int returns new/edited post's ID.
  */
-
 function st_add_student( $request ) {
 
-	$args = array(
+	// Sanitizes the request
+	$sanitized_request = sanitize_post( $request, 'db' );
 
-		'p' 		=> $request['id'],
-		'post_type' => 'student',
-		
-	);
+	// IF REQUEST METHOD IS POST
+	if ( $sanitized_request->get_method() === 'POST' ) {
+
+		// Checks if user specified ID | User shouldn't be able to set the ID
+		if ( ! ( $sanitized_request->has_param( 'ID' ) ) ) {
+			
+			// Adds 'student' as post type into the paramenters for wp_insert_post
+			$sanitized_request->set_param( 'post_type', 'student' );
+
+			// Inserts new student into DB and return it's ID
+			return wp_insert_post( $sanitized_request->get_params(), true );
+
+		} else return 400; // Gives error if user HAS specified ID
 	
-	$post = get_posts( $args );
-	
-	if ( isset( $post[0] ) ) {
+	// IF REQUEST METHOD IS PUT
+	} elseif ( $sanitized_request->get_method() === 'PUT' ) {
 		
-		
-		
-	} else {
-		
-		return null;
-		
-	}
-	
-}
+		// Checks if user specified ID
+		if ( $sanitized_request->has_param( 'ID' ) ) {
 
-/** 
- *  Edits a student
- * 
- * @param int $id ID of the student.
- * @return bool true if successful, false otherwise.
- */
+			// Adds 'student' as post type into the paramenters for wp_insert_post
+			$sanitized_request->set_param( 'post_type', 'student' );
 
-function st_edit_student( $request ) {
+			// Inserts new data to user and return it's ID
+			return wp_insert_post( $sanitized_request->get_params(), true );
 
-	return 'helllo';
-
-	$args = array(
-
-		'p' 		=> $request['id'],
-		'post_type' => 'student',
-
-	);
-
-	$post = get_posts( $args );
-
-	if ( isset( $post[0] ) ) {
-
-		
-
-	} else {
-
-		return null;
+		} else return 400; // Gives error if user HASN'T specified ID
 
 	}
-
 }
 
 /** 
  *  Deletes a student
  * 
- * @param int $id ID of the student.
- * @return bool true if successful, false otherwise.
+ * @param WP_REST_Request $request that contains student's ID
+ * 
+ * @return array|bool student's data if successful, false otherwise.
  */
 
 function st_delete_student( $request ) {
 
-	$args = array(
+	// Sanitizes the request
+	$sanitized_request = sanitize_post( $request, 'db' );
 
-		'p' 		=> $request['id'],
-		'post_type' => 'student',
+	// Checks if user specified ID
+	if ( $sanitized_request->has_param( 'ID' ) ) {
 
-	);
+		// Saves the ID of the student
+		$id = $sanitized_request->get_param('ID');
 
-	$post = get_posts( $args );
-
-	if ( isset($post[0] ) ) {
-
-		
+		if ( get_post_status( $id ) ) return wp_delete_post( $id );
 
 	} else {
-
-		return null;
-
+		return false; // Return False if there is no ID specified
 	}
 
 }
 
-
   /**
-   * Register Rest Route
+   * Register Rest Routes
    */
 
    function st_register_rest_route() {
 
-	//* Get all students
-	register_rest_route( 'cpt-student/v1', '/all-students/', array(
+	$my_namespace = 'cpt-student/v';
+	$my_version   = '1';
 
-		'methods' 				=> 'GET',
-		'callback' 				=> 'st_get_all_students',
-		'permission_callback' 	=> '__return_true',
+	$namespace = $my_namespace . $my_version;
 
-	) );
-
-	//* Get student by ID
-	register_rest_route( 'cpt-student/v1', '/student/(?P<id>\d+)', array(
+	// Get student by ID if specified else get all students
+	register_rest_route( $namespace, '/student/(?P<ID>\d+)', array(
 		'methods' 				=> 'GET',
 		'callback' 				=> 'st_get_student',
 		'permission_callback' 	=> '__return_true',
 		'args' 					=> array(
-
-			'id' => array(
+			'ID' => array(
 
 				'validate_callback' => function($param, $request, $key) {
 
 					return is_numeric( $param );
 
 				}
-
 			),
-
 		),
-	) );
+		) 
+	);
 
-	//* Add student
-	register_rest_route( 'cpt-student/v1', '/add-student/', array(
+	// Add / edit student
+	register_rest_route( $namespace, '/student/', array(
 
-		'methods' 				=> 'POST',
-		'callback' 				=> 'st_add_student',
-		'permission_callback' 	=> '__return_true',
+		// GET METHOD | Get all student or student by ID
+		array(
+			'methods' 				=> 'GET',
+			'callback' 				=> 'st_get_student',
+			'permission_callback' 	=> '__return_true',
+		),
 
-	) );
+		// POST, PUT METHOD | Add new or edit student
+		array(
+			'methods' 				=> ['POST', 'PUT'],
+			'callback' 				=> 'st_add_student',
+			'permission_callback' 	=> function () {
+				return current_user_can( 'administrator' );
+			  },
+			'args' 					=> array(
 	
-	//* Edit student
-	register_rest_route( 'cpt-student/v1', '/edit-student/', array(
+				'ID' => array(
+					'type' => 'integer',
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+					}
+				),
+				'post_title' => array(
+					'required' => true,
+					'type' => 'string',
+					'sanitize_callback' => function( $param ) {
+						return sanitize_text_field( $param );
+					}
+				),
+				'post_content' => array(
+					'required' => true,
+					'type' => 'string',
+					'sanitize_callback' => function( $param ) {
+						return sanitize_textarea_field( $param );
+					}
+				),
+			),
+		),
 
-		'methods' 				=> 'GET',
-		'callback' 				=> 'st_edit_student',
-		'permission_callback' 	=> function () {
-			return current_user_can( 'edit_posts' );
-		  },
+		// DELETE METHOD | Deletes a student
+		array(
+			'methods' 				=> 'DELETE',
+			'callback' 				=> 'st_delete_student',
+			'permission_callback' 	=> function () {
+				return current_user_can( 'administrator' );
+			  },
+			'args' 					=> array(
+	
+				'ID' => array(
+	
+					'required' => true,
+					'type' => 'integer',
+					'validate_callback' => function($param, $request, $key) {
+	
+						return is_numeric( $param );
+	
+					}
+	
+				),
+	
+			),
+		)
 
 	) );
+}
 
-	//* Delete student
-	register_rest_route( 'cpt-student/v1', '/delete-student/', array(
-
-		'methods' 				=> 'POST',
-		'callback' 				=> 'st_delete_student',
-		'permission_callback' 	=> '__return_true',
-
-	) );
-
-   }
-
-   add_action( 'rest_api_init', 'st_register_rest_route' );
+add_action( 'rest_api_init', 'st_register_rest_route' );

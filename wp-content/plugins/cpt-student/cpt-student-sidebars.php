@@ -21,14 +21,15 @@ add_action( 'widgets_init', 'st_sidebar' );
 
 function st_display_sidebar( $content ) {
 
-	if ( is_active_sidebar( 'custom' ) && ! is_admin() ) {
+		if ( is_active_sidebar( 'custom' ) ) {
 
-		return $content .= dynamic_sidebar( 'custom' );
+			 dynamic_sidebar( 'custom' );
+	
+		}
 
-	}
-
-	return $content;
+		return $content;
 
 }
 
-add_filter( 'the_content', 'st_display_sidebar', 20 );
+// Bugs some pages
+//add_filter( 'the_content', 'st_display_sidebar', 10 );

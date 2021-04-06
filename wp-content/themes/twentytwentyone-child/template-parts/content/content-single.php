@@ -24,18 +24,7 @@
 	</div>
 
 	<div class="entry-content">
-		<?php
-		the_content();
-
-		wp_link_pages(
-			array(
-				'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
-				'after'    => '</nav>',
-				/* translators: %: Page number. */
-				'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
-			)
-		);
-		?>
+		<?php the_content(); ?>
 
 		<img class="entry-image" src="https://devrix.com/wp-content/themes/devrix-v2/assets/images/img-dixy-standing-left.png">
 	
