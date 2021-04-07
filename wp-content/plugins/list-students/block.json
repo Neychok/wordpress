@@ -3,8 +3,8 @@
 	"name": "create-block/list-students",
 	"title": "List Students",
 	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block written with ESNext standard and JSX support – build step required.",
+	"icon": "list-view",
+	"description": "Displays students.",
 	"supports": {
 		"html": false
 	},

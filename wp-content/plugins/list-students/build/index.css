@@ -1,1 +1,40 @@
-.wp-block-create-block-list-students{border:1px dotted red}
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-create-block-list-students {
+  border: 1px dotted #f00;
+}
+
+.students {
+  display: flex;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.student {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid gray;
+  background: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.student-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
+}
+
+.student-name {
+  color: #333;
+}
+
+.student-select {
+  width: 100%;
+}
+
+/*# sourceMappingURL=index.css.map*/

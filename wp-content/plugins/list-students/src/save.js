@@ -1,34 +1,48 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
- */
-import { __ } from '@wordpress/i18n';
+import { __ } from "@wordpress/i18n";
+import { useBlockProps } from "@wordpress/block-editor";
+import { map } from "lodash";
+import "./style.scss";
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
- */
-import { useBlockProps } from '@wordpress/block-editor';
+export default function save({ attributes }) {
+	console.log;
+	const { students } = attributes;
 
-/**
- * The save function defines the way in which the different attributes should
- * be combined into the final markup, which is then serialized by the block
- * editor into `post_content`.
- *
- * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/#save
- *
- * @return {WPElement} Element to render.
- */
-export default function save() {
 	return (
-		<p { ...useBlockProps.save() }>
-			{ __(
-				'List Students – hello from the saved content!',
-				'list-students'
-			) }
-		</p>
+		<div className="students">
+			{map(students, (student) => {
+				if (student.student_status !== attributes.whichToShow) {
+					return;
+				}
+
+				let studentImage;
+				if (
+					student._embedded !== undefined &&
+					student._embedded["wp:featuredmedia"]["0"].source_url !== undefined
+				) {
+					studentImage = student._embedded["wp:featuredmedia"]["0"].source_url;
+				} else {
+					studentImage = "https://placeimg.com/150/150/people";
+				}
+
+				return (
+					<a className="student" href="#">
+						<img className="student-image" src={studentImage} />
+						<h3 className="student-name">{student.title.rendered}</h3>
+					</a>
+				);
+			})}
+		</div>
 	);
 }
+
+// //
+// //
+// //
+// import { map } from "lodash";
+// import { useBlockProps } from "@wordpress/block-editor";
+
+// import "./style.scss";
+
+// export default save = (attributes) => {
+// 	return <div {...useBlockProps().save()}></div>;
+// };
