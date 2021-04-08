@@ -21,10 +21,19 @@
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/writing-your-first-block-type/
  */
 
-function list_student_render( $atts, $content ) {
-	if ( ! isset( $atts ) ) return;
+// Exit if accessed directly 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+};
 
-	
+function list_student_render( $atts ) {
+
+	// Some safety checks before procceeding
+	if ( ! isset( $atts ) ) return;
+	if ( ! isset( $atts["whichToShow"] ) ) return;
+	if ( ! isset( $atts["studentToShow"] ) ) return;
+
+	// IF user wants to display active students
 	if ( $atts["whichToShow"] === "active" ) {
 		
 		$meta_query = array(
@@ -34,6 +43,7 @@ function list_student_render( $atts, $content ) {
 			)
 		);
 
+	// IF user wants to display inactive students
 	} elseif ( $atts["whichToShow"]  === "inactive" ) {
 
 		$meta_query = array(
@@ -43,8 +53,9 @@ function list_student_render( $atts, $content ) {
 			)
 		);
 
-	}
+	} else return;
 
+	// Arguments for WP_Query
 	$args = array(
 		'post_type'         => 'student',
 		'post_status'       => 'publish',
@@ -55,44 +66,71 @@ function list_student_render( $atts, $content ) {
 		'meta_query'        => $meta_query
 	);
 
-
+	// THE QUERY
 	$the_query = new WP_Query( $args );
 	
+	// Starts OUTPUT BUFFER
 	ob_start();
 	?>
 
-
+	<!-- Checks if the query result has any posts (students) -->
 	<?php if ( $the_query->have_posts() ) : ?>
+
+		<!-- Wrapper for the students -->
 		<div className="students">
+
+		<!-- Loop through the query results (students) -->
 		<?php while ( $the_query->have_posts() ) : ?>
+
 			<?php $the_query->the_post(); ?>
+
 			<a className="student" href="<?php echo the_permalink(); ?>">
+				<!-- If student has no thumbnail uses a placeholder. Here just for testing purposes -->
 				<?php if ( has_post_thumbnail() ) the_post_thumbnail();
 						else echo '<img src="https://via.placeholder.com/150">'; ?>
+				<!-- The name of the student -->
 				<?php the_title(); ?>
 			</a>
-		<?php endwhile ?>
-		</div>
-	<?php else :?>
-		<div>No students found!</div>
-	<?php endif ?>
-	<?php
-	$args = ob_get_clean();
 
-	return $args;
+		<!-- The of while loop -->
+		<?php endwhile; ?>
+
+		<!-- Closing student wrapper -->
+		</div>
+
+	<!-- If Query has no posts (students) -->
+	<?php else :?>
+		<div>No students found!</div> 
+	<?php endif ?>
+	
+	<?php
+	// Stops OUTPUT BUFFER and saves it in $args
+	$html = ob_get_clean();
+
+	// Should return an HTML
+	return $html;
 }
 
+/**
+ * Registers the new Block
+ */
 function create_block_list_students_block_init() {
 	register_block_type_from_metadata( __DIR__, [
+		
+		/**
+		 * Callback to the function that will render the block
+		 * It's required for dynamic blocks
+		 * ( Blocks without save function ) 
+		 */
 		'render_callback' => 'list_student_render',
+
 		'attributes' => [
-			// 'students' => [
-			// 	'type' => 'array',
-			// ],
+			// Used for posts_per_page to determine how much students to show
 			'studentToShow' => [
 				'type' => 'number',
 				'default' => 5
 			],
+			// Used for the meta_query to determine which student to show (active or inactive)
 			'whichToShow' => [
 				'type' => 'string',
 				'default' => 'active'
@@ -101,6 +139,9 @@ function create_block_list_students_block_init() {
 }
 add_action( 'init', 'create_block_list_students_block_init' );
 
+/**
+ * Makes "student_status" available to the REST API
+ */
 function add_custom_field() {
     register_rest_field( 'student',
         'student_status',

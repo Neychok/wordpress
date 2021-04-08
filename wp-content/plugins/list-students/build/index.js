@@ -99,51 +99,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_editor_scss__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/server-side-render */ "@wordpress/server-side-render");
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_editor_scss__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/server-side-render */ "@wordpress/server-side-render");
+/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
 
 
-
+/**
+ * Main function that renders the admin side
+ */
 
 var Edit = function Edit(props) {
-  var studentList = props.studentList,
-      attributes = props.attributes,
-      setAttributes = props.setAttributes; // const hasStudents = Array.isArray(studentList) && studentList.length;
-  // if (!hasStudents) {
-  // 	return (
-  // 		<Placeholder icon="excerpt-view" label={"Post Block"}>
-  // 			{!Array.isArray(studentList) ? <Spinner /> : "No students found."}
-  // 		</Placeholder>
-  // 	);
-  // }
-  // let studentArray = [];
-  // studentList.map((student) => {
-  // 	let image;
-  // 	if (student._embedded !== undefined) {
-  // 		if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
-  // 			image = student._embedded["wp:featuredmedia"]["0"].source_url;
-  // 		}
-  // 	} else {
-  // 		image = "";
-  // 	}
-  // 	studentArray.push({
-  // 		id: student.id,
-  // 		name: student.title.rendered,
-  // 		image: image,
-  // 		link: student.link,
-  // 	});
-  // });
-  // RADIO
+  var attributes = props.attributes,
+      setAttributes = props.setAttributes; // RADIO options
 
   var radioOptions = [{
     label: "Active",
@@ -151,64 +125,49 @@ var Edit = function Edit(props) {
   }, {
     label: "Inactive",
     value: "inactive"
-  }];
+  }]; // Fires when user clicks on a option
 
   var whichToShowOnChange = function whichToShowOnChange(changedOption) {
     setAttributes({
       whichToShow: changedOption
     });
   }; // NUMBER CONTROL
+  // Fire when user changes how much students to show
 
 
   var studentToShowOnChange = function studentToShowOnChange(changedNumber) {
     setAttributes({
       studentToShow: parseInt(changedNumber, 10)
     });
-  }; //useEffect(() => setAttributes({ students: studentArray }), []);
-
+  };
 
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["useBlockProps"])(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["InspectorControls"], {
     key: "setting"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Panel"], {
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["Panel"], {
     id: "gutenpride-controls"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelBody"], {
     title: "Settings",
     initialOpen: true
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["RadioControl"], {
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["RadioControl"], {
     id: "default-radiogroup",
     label: "Which students to show",
     onChange: whichToShowOnChange,
-    selected: attributes.whichToShow,
+    selected: attributes === null || attributes === void 0 ? void 0 : attributes.whichToShow,
     options: radioOptions
-  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["__experimentalNumberControl"], {
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["__experimentalNumberControl"], {
     label: "Number of students",
     className: "student-number",
     onChange: studentToShowOnChange,
     value: attributes.studentToShow,
     min: "1",
     max: "25"
-  })))))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_5___default.a, {
+  })))))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_4___default.a, {
     block: props.name,
     attributes: attributes
   }));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Edit); // export default withSelect((select, ownProps) => {
-// 	const { attributes } = ownProps;
-// 	const postQuery = {
-// 		per_page: attributes.studentToShow,
-// 		_embed: true,
-// 		// metaKey: "student_status",
-// 		// metaValue: "active",
-// 	};
-// 	return {
-// 		studentList: select("core").getEntityRecords(
-// 			"postType",
-// 			"student",
-// 			postQuery
-// 		),
-// 	};
-// })(Edit);
+/* harmony default export */ __webpack_exports__["default"] = (Edit);
 
 /***/ }),
 
@@ -242,26 +201,11 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
   title: "List students",
   icon: "megaphone",
   category: "widgets",
-  // attributes: {
-  // 	students: {
-  // 		type: "string",
-  // 		source: "attribute",
-  // 		selector: "span",
-  // 		attribute: "value",
-  // 	},
-  // 	studentToShow: {
-  // 		type: "number",
-  // 		default: 5,
-  // 	},
-  // 	whichToShow: {
-  // 		type: "string",
-  // 		default: "active",
-  // 	},
-  // },
   edit: _edit__WEBPACK_IMPORTED_MODULE_1__["default"],
   save: function save() {
     return null;
-  }
+  } // Should resolve to NULL if you want a dynamic block
+
 });
 
 /***/ }),
@@ -296,17 +240,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["components"]; }());
-
-/***/ }),
-
-/***/ "@wordpress/data":
-/*!******************************!*\
-  !*** external ["wp","data"] ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["data"]; }());
 
 /***/ }),
 

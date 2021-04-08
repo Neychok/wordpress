@@ -1,69 +1,40 @@
 import { useBlockProps, InspectorControls } from "@wordpress/block-editor";
-import { withSelect } from "@wordpress/data";
 import {
-	Placeholder,
-	Spinner,
 	Panel,
 	PanelBody,
 	PanelRow,
 	RadioControl,
 	__experimentalNumberControl as NumberControl,
 } from "@wordpress/components";
-import { Fragment, useEffect } from "@wordpress/element";
+import { Fragment } from "@wordpress/element";
 import "./editor.scss";
 import ServerSideRender from "@wordpress/server-side-render";
 
+/**
+ * Main function that renders the admin side
+ */
 const Edit = (props) => {
-	const { studentList, attributes, setAttributes } = props;
+	const { attributes, setAttributes } = props;
 
-	// const hasStudents = Array.isArray(studentList) && studentList.length;
-	// if (!hasStudents) {
-	// 	return (
-	// 		<Placeholder icon="excerpt-view" label={"Post Block"}>
-	// 			{!Array.isArray(studentList) ? <Spinner /> : "No students found."}
-	// 		</Placeholder>
-	// 	);
-	// }
-
-	// let studentArray = [];
-
-	// studentList.map((student) => {
-	// 	let image;
-
-	// 	if (student._embedded !== undefined) {
-	// 		if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
-	// 			image = student._embedded["wp:featuredmedia"]["0"].source_url;
-	// 		}
-	// 	} else {
-	// 		image = "";
-	// 	}
-
-	// 	studentArray.push({
-	// 		id: student.id,
-	// 		name: student.title.rendered,
-	// 		image: image,
-	// 		link: student.link,
-	// 	});
-	// });
-
-	// RADIO
+	// RADIO options
 	const radioOptions = [
 		{ label: "Active", value: "active" },
 		{ label: "Inactive", value: "inactive" },
 	];
+	// Fires when user clicks on a option
 	const whichToShowOnChange = (changedOption) => {
 		setAttributes({ whichToShow: changedOption });
 	};
 
 	// NUMBER CONTROL
+	// Fire when user changes how much students to show
 	const studentToShowOnChange = (changedNumber) => {
 		setAttributes({ studentToShow: parseInt(changedNumber, 10) });
 	};
 
-	//useEffect(() => setAttributes({ students: studentArray }), []);
-
 	return (
 		<div {...useBlockProps()}>
+			{/* Wrapper for the sidebar */}
 			<Fragment>
 				<InspectorControls key="setting">
 					<Panel id="gutenpride-controls">
@@ -73,7 +44,7 @@ const Edit = (props) => {
 									id="default-radiogroup"
 									label="Which students to show"
 									onChange={whichToShowOnChange}
-									selected={attributes.whichToShow}
+									selected={attributes?.whichToShow}
 									options={radioOptions}
 								/>
 							</PanelRow>
@@ -91,25 +62,10 @@ const Edit = (props) => {
 					</Panel>
 				</InspectorControls>
 			</Fragment>
+
+			{/* Component that renders the block */}
 			<ServerSideRender block={props.name} attributes={attributes} />
 		</div>
 	);
 };
 export default Edit;
-// export default withSelect((select, ownProps) => {
-// 	const { attributes } = ownProps;
-
-// 	const postQuery = {
-// 		per_page: attributes.studentToShow,
-// 		_embed: true,
-// 		// metaKey: "student_status",
-// 		// metaValue: "active",
-// 	};
-// 	return {
-// 		studentList: select("core").getEntityRecords(
-// 			"postType",
-// 			"student",
-// 			postQuery
-// 		),
-// 	};
-// })(Edit);

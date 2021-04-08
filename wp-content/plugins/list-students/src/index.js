@@ -5,22 +5,6 @@ registerBlockType("create-block/list-students", {
 	title: "List students",
 	icon: "megaphone",
 	category: "widgets",
-	// attributes: {
-	// 	students: {
-	// 		type: "string",
-	// 		source: "attribute",
-	// 		selector: "span",
-	// 		attribute: "value",
-	// 	},
-	// 	studentToShow: {
-	// 		type: "number",
-	// 		default: 5,
-	// 	},
-	// 	whichToShow: {
-	// 		type: "string",
-	// 		default: "active",
-	// 	},
-	// },
 	edit: Edit,
-	save: () => null,
+	save: () => null, // Should resolve to NULL if you want a dynamic block
 });
