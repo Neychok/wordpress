@@ -49,7 +49,6 @@ function list_student_render( $atts, $content ) {
 		<div className="students">
 		<?php while ( $the_query->have_posts() ) : ?>
 			<?php $the_query->the_post(); ?>
-			<?php var_dump(get_post_meta( 262 ) ) ?>
 			<a className="student" href="<?php echo the_permalink(); ?>">
 				<?php if ( has_post_thumbnail() ) the_post_thumbnail();
 						else echo '<img src="https://via.placeholder.com/150">'; ?>
