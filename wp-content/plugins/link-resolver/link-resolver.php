@@ -63,7 +63,7 @@ function lr_page() {
             <button class="button button-primary" id="lr-search">Search</button>
         </div>
         <div id="url-content"><?php echo get_transient( 'cached_result' ) ?></div >
-    </div
+    </div>
     <?php
 }
 
