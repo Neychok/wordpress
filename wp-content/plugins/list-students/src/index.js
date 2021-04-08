@@ -5,19 +5,22 @@ registerBlockType("create-block/list-students", {
 	title: "List students",
 	icon: "megaphone",
 	category: "widgets",
-	attributes: {
-		students: {
-			type: "array",
-		},
-		studentToShow: {
-			type: "number",
-			default: 5,
-		},
-		whichToShow: {
-			type: "string",
-			default: "active",
-		},
-	},
+	// attributes: {
+	// 	students: {
+	// 		type: "string",
+	// 		source: "attribute",
+	// 		selector: "span",
+	// 		attribute: "value",
+	// 	},
+	// 	studentToShow: {
+	// 		type: "number",
+	// 		default: 5,
+	// 	},
+	// 	whichToShow: {
+	// 		type: "string",
+	// 		default: "active",
+	// 	},
+	// },
 	edit: Edit,
 	save: () => null,
 });

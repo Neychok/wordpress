@@ -34,15 +34,3 @@ export default function save({ attributes }) {
 		</div>
 	);
 }
-
-// //
-// //
-// //
-// import { map } from "lodash";
-// import { useBlockProps } from "@wordpress/block-editor";
-
-// import "./style.scss";
-
-// export default save = (attributes) => {
-// 	return <div {...useBlockProps().save()}></div>;
-// };

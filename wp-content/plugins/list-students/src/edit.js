@@ -1,4 +1,3 @@
-import { map } from "lodash";
 import { useBlockProps, InspectorControls } from "@wordpress/block-editor";
 import { withSelect } from "@wordpress/data";
 import {
@@ -10,14 +9,12 @@ import {
 	RadioControl,
 	__experimentalNumberControl as NumberControl,
 } from "@wordpress/components";
-import { Fragment } from "@wordpress/element";
+import { Fragment, useEffect } from "@wordpress/element";
 import "./editor.scss";
 import ServerSideRender from "@wordpress/server-side-render";
 
 const Edit = (props) => {
-	console.log(props);
 	const { studentList, attributes, setAttributes } = props;
-
 	const hasStudents = Array.isArray(studentList) && studentList.length;
 	if (!hasStudents) {
 		return (
@@ -26,27 +23,24 @@ const Edit = (props) => {
 			</Placeholder>
 		);
 	}
+	let studentArray = [];
 
-	// update Atts
-	setAttributes({ students: studentList });
+	studentList.map((student) => {
+		let image;
 
-	let studentsArray = [];
-	attributes.students.map((student) => {
-		let studentImage;
-		if (
-			student._embedded !== undefined &&
-			student._embedded["wp:featuredmedia"]["0"].source_url !== undefined
-		) {
-			studentImage = student._embedded["wp:featuredmedia"]["0"].source_url;
+		if (student._embedded !== undefined) {
+			if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
+				image = student._embedded["wp:featuredmedia"]["0"].source_url;
+			}
 		} else {
-			studentImage = "https://placeimg.com/150/150/people";
+			image = "";
 		}
 
-		studentsArray.push({
+		studentArray.push({
+			id: student.id,
 			name: student.title.rendered,
+			image: image,
 			link: student.link,
-			image: studentImage,
-			status: student.student_status,
 		});
 	});
 
@@ -61,8 +55,11 @@ const Edit = (props) => {
 
 	// NUMBER CONTROL
 	const numberOnChange = (changedNumber) => {
+		setAttributes({ students: studentArray });
 		setAttributes({ studentToShow: parseInt(changedNumber, 10) });
 	};
+
+	useEffect(() => setAttributes({ students: studentArray }), []);
 
 	return (
 		<div {...useBlockProps()}>
@@ -93,14 +90,7 @@ const Edit = (props) => {
 					</Panel>
 				</InspectorControls>
 			</Fragment>
-			<ServerSideRender
-				block={props.name}
-				attributes={{
-					students: studentsArray,
-					whichToShow: attributes.whichToShow,
-					studentToShow: attributes.studentToShow,
-				}}
-			/>
+			<ServerSideRender block={props.name} attributes={attributes} />
 		</div>
 	);
 };
