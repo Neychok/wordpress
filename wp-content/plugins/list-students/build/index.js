@@ -118,65 +118,55 @@ __webpack_require__.r(__webpack_exports__);
 var Edit = function Edit(props) {
   var studentList = props.studentList,
       attributes = props.attributes,
-      setAttributes = props.setAttributes;
-  var hasStudents = Array.isArray(studentList) && studentList.length;
-
-  if (!hasStudents) {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Placeholder"], {
-      icon: "excerpt-view",
-      label: "Post Block"
-    }, !Array.isArray(studentList) ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Spinner"], null) : "No students found.");
-  }
-
-  var studentArray = [];
-  studentList.map(function (student) {
-    var image;
-
-    if (student._embedded !== undefined) {
-      if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
-        image = student._embedded["wp:featuredmedia"]["0"].source_url;
-      }
-    } else {
-      image = "";
-    }
-
-    studentArray.push({
-      id: student.id,
-      name: student.title.rendered,
-      image: image,
-      link: student.link
-    });
-  }); // RADIO
+      setAttributes = props.setAttributes; // const hasStudents = Array.isArray(studentList) && studentList.length;
+  // if (!hasStudents) {
+  // 	return (
+  // 		<Placeholder icon="excerpt-view" label={"Post Block"}>
+  // 			{!Array.isArray(studentList) ? <Spinner /> : "No students found."}
+  // 		</Placeholder>
+  // 	);
+  // }
+  // let studentArray = [];
+  // studentList.map((student) => {
+  // 	let image;
+  // 	if (student._embedded !== undefined) {
+  // 		if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
+  // 			image = student._embedded["wp:featuredmedia"]["0"].source_url;
+  // 		}
+  // 	} else {
+  // 		image = "";
+  // 	}
+  // 	studentArray.push({
+  // 		id: student.id,
+  // 		name: student.title.rendered,
+  // 		image: image,
+  // 		link: student.link,
+  // 	});
+  // });
+  // RADIO
 
   var radioOptions = [{
     label: "Active",
     value: "active"
   }, {
     label: "Inactive",
-    value: ""
+    value: "inactive"
   }];
 
-  var radioOnChange = function radioOnChange(changedOption) {
+  var whichToShowOnChange = function whichToShowOnChange(changedOption) {
     setAttributes({
       whichToShow: changedOption
     });
   }; // NUMBER CONTROL
 
 
-  var numberOnChange = function numberOnChange(changedNumber) {
-    setAttributes({
-      students: studentArray
-    });
+  var studentToShowOnChange = function studentToShowOnChange(changedNumber) {
     setAttributes({
       studentToShow: parseInt(changedNumber, 10)
     });
-  };
+  }; //useEffect(() => setAttributes({ students: studentArray }), []);
 
-  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    return setAttributes({
-      students: studentArray
-    });
-  }, []);
+
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["useBlockProps"])(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__["InspectorControls"], {
     key: "setting"
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["Panel"], {
@@ -187,13 +177,13 @@ var Edit = function Edit(props) {
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["RadioControl"], {
     id: "default-radiogroup",
     label: "Which students to show",
-    onChange: radioOnChange,
+    onChange: whichToShowOnChange,
     selected: attributes.whichToShow,
     options: radioOptions
   })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["__experimentalNumberControl"], {
     label: "Number of students",
     className: "student-number",
-    onChange: numberOnChange,
+    onChange: studentToShowOnChange,
     value: attributes.studentToShow,
     min: "1",
     max: "25"
@@ -203,18 +193,22 @@ var Edit = function Edit(props) {
   }));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__["withSelect"])(function (select, ownProps) {
-  var attributes = ownProps.attributes;
-  var postQuery = {
-    per_page: attributes.studentToShow,
-    _embed: true // metaKey: "student_status",
-    // metaValue: "active",
-
-  };
-  return {
-    studentList: select("core").getEntityRecords("postType", "student", postQuery)
-  };
-})(Edit));
+/* harmony default export */ __webpack_exports__["default"] = (Edit); // export default withSelect((select, ownProps) => {
+// 	const { attributes } = ownProps;
+// 	const postQuery = {
+// 		per_page: attributes.studentToShow,
+// 		_embed: true,
+// 		// metaKey: "student_status",
+// 		// metaValue: "active",
+// 	};
+// 	return {
+// 		studentList: select("core").getEntityRecords(
+// 			"postType",
+// 			"student",
+// 			postQuery
+// 		),
+// 	};
+// })(Edit);
 
 /***/ }),
 

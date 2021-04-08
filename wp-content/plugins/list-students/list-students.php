@@ -23,7 +23,27 @@
 
 function list_student_render( $atts, $content ) {
 	if ( ! isset( $atts ) ) return;
-	if ( ! isset( $atts["students"] ) ) return;
+
+	
+	if ( $atts["whichToShow"] === "active" ) {
+		
+		$meta_query = array(
+			array(
+				'key'   => 'student_status',
+				'value' => "active",
+			)
+		);
+
+	} elseif ( $atts["whichToShow"]  === "inactive" ) {
+
+		$meta_query = array(
+			array(
+				'key'   => 'student_status',
+				'compare' => "NOT EXISTS",
+			)
+		);
+
+	}
 
 	$args = array(
 		'post_type'         => 'student',
@@ -32,13 +52,10 @@ function list_student_render( $atts, $content ) {
 		'orderby'           => 'date',
 		'order'             => 'DESC',
 		'paged'             => 1,
-		'meta_query'        => array(
-			array(
-				'key'   => 'student_status',
-				'value' => $atts["whichToShow"],
-				)
-			),
+		'meta_query'        => $meta_query
 	);
+
+
 	$the_query = new WP_Query( $args );
 	
 	ob_start();
@@ -56,6 +73,8 @@ function list_student_render( $atts, $content ) {
 			</a>
 		<?php endwhile ?>
 		</div>
+	<?php else :?>
+		<div>No students found!</div>
 	<?php endif ?>
 	<?php
 	$args = ob_get_clean();
@@ -67,9 +86,9 @@ function create_block_list_students_block_init() {
 	register_block_type_from_metadata( __DIR__, [
 		'render_callback' => 'list_student_render',
 		'attributes' => [
-			'students' => [
-				'type' => 'array',
-			],
+			// 'students' => [
+			// 	'type' => 'array',
+			// ],
 			'studentToShow' => [
 				'type' => 'number',
 				'default' => 5

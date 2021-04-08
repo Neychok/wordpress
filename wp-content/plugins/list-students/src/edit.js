@@ -15,51 +15,52 @@ import ServerSideRender from "@wordpress/server-side-render";
 
 const Edit = (props) => {
 	const { studentList, attributes, setAttributes } = props;
-	const hasStudents = Array.isArray(studentList) && studentList.length;
-	if (!hasStudents) {
-		return (
-			<Placeholder icon="excerpt-view" label={"Post Block"}>
-				{!Array.isArray(studentList) ? <Spinner /> : "No students found."}
-			</Placeholder>
-		);
-	}
-	let studentArray = [];
 
-	studentList.map((student) => {
-		let image;
+	// const hasStudents = Array.isArray(studentList) && studentList.length;
+	// if (!hasStudents) {
+	// 	return (
+	// 		<Placeholder icon="excerpt-view" label={"Post Block"}>
+	// 			{!Array.isArray(studentList) ? <Spinner /> : "No students found."}
+	// 		</Placeholder>
+	// 	);
+	// }
 
-		if (student._embedded !== undefined) {
-			if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
-				image = student._embedded["wp:featuredmedia"]["0"].source_url;
-			}
-		} else {
-			image = "";
-		}
+	// let studentArray = [];
 
-		studentArray.push({
-			id: student.id,
-			name: student.title.rendered,
-			image: image,
-			link: student.link,
-		});
-	});
+	// studentList.map((student) => {
+	// 	let image;
+
+	// 	if (student._embedded !== undefined) {
+	// 		if (student._embedded["wp:featuredmedia"]["0"].source_url !== undefined) {
+	// 			image = student._embedded["wp:featuredmedia"]["0"].source_url;
+	// 		}
+	// 	} else {
+	// 		image = "";
+	// 	}
+
+	// 	studentArray.push({
+	// 		id: student.id,
+	// 		name: student.title.rendered,
+	// 		image: image,
+	// 		link: student.link,
+	// 	});
+	// });
 
 	// RADIO
 	const radioOptions = [
 		{ label: "Active", value: "active" },
-		{ label: "Inactive", value: "" },
+		{ label: "Inactive", value: "inactive" },
 	];
-	const radioOnChange = (changedOption) => {
+	const whichToShowOnChange = (changedOption) => {
 		setAttributes({ whichToShow: changedOption });
 	};
 
 	// NUMBER CONTROL
-	const numberOnChange = (changedNumber) => {
-		setAttributes({ students: studentArray });
+	const studentToShowOnChange = (changedNumber) => {
 		setAttributes({ studentToShow: parseInt(changedNumber, 10) });
 	};
 
-	useEffect(() => setAttributes({ students: studentArray }), []);
+	//useEffect(() => setAttributes({ students: studentArray }), []);
 
 	return (
 		<div {...useBlockProps()}>
@@ -71,7 +72,7 @@ const Edit = (props) => {
 								<RadioControl
 									id="default-radiogroup"
 									label="Which students to show"
-									onChange={radioOnChange}
+									onChange={whichToShowOnChange}
 									selected={attributes.whichToShow}
 									options={radioOptions}
 								/>
@@ -80,7 +81,7 @@ const Edit = (props) => {
 								<NumberControl
 									label="Number of students"
 									className="student-number"
-									onChange={numberOnChange}
+									onChange={studentToShowOnChange}
 									value={attributes.studentToShow}
 									min="1"
 									max="25"
@@ -94,21 +95,21 @@ const Edit = (props) => {
 		</div>
 	);
 };
+export default Edit;
+// export default withSelect((select, ownProps) => {
+// 	const { attributes } = ownProps;
 
-export default withSelect((select, ownProps) => {
-	const { attributes } = ownProps;
-
-	const postQuery = {
-		per_page: attributes.studentToShow,
-		_embed: true,
-		// metaKey: "student_status",
-		// metaValue: "active",
-	};
-	return {
-		studentList: select("core").getEntityRecords(
-			"postType",
-			"student",
-			postQuery
-		),
-	};
-})(Edit);
+// 	const postQuery = {
+// 		per_page: attributes.studentToShow,
+// 		_embed: true,
+// 		// metaKey: "student_status",
+// 		// metaValue: "active",
+// 	};
+// 	return {
+// 		studentList: select("core").getEntityRecords(
+// 			"postType",
+// 			"student",
+// 			postQuery
+// 		),
+// 	};
+// })(Edit);
